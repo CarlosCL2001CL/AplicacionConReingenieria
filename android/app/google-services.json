@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "21515643659",
+    "project_id": "historiasclinicas-262fa",
+    "storage_bucket": "historiasclinicas-262fa.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:21515643659:android:dc9b3a08ff5af3ead7900e",
+        "android_client_info": {
+          "package_name": "com.example.flutter_application_1"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDNUBw7JJgyuRefpwuxIO9ZURMw_lIa7Xk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
