@@ -23,20 +23,31 @@ class _HistoriaState extends State<Historia> {
   final TextEditingController _telefonoController = TextEditingController();
   final TextEditingController _remisionController = TextEditingController();
   final TextEditingController _coberturaController = TextEditingController();
-  final TextEditingController _observacionesController = TextEditingController();
+  final TextEditingController _observacionesController =
+      TextEditingController();
   final TextEditingController _responsableController = TextEditingController();
-  final TextEditingController _motivoConsultaController = TextEditingController();
-  final TextEditingController _desencadenantesController = TextEditingController();
-  final TextEditingController _antecedentesEmbarazoController = TextEditingController();
-  final TextEditingController _antecedentesPsicomotorController = TextEditingController();
-  final TextEditingController _antecedentesLenguajeController = TextEditingController();
-  final TextEditingController _antecedentesIntelectualController = TextEditingController();
-  final TextEditingController _antecedentesSocioAfectivoController = TextEditingController();
+  final TextEditingController _motivoConsultaController =
+      TextEditingController();
+  final TextEditingController _desencadenantesController =
+      TextEditingController();
+  final TextEditingController _antecedentesEmbarazoController =
+      TextEditingController();
+  final TextEditingController _antecedentesPsicomotorController =
+      TextEditingController();
+  final TextEditingController _antecedentesLenguajeController =
+      TextEditingController();
+  final TextEditingController _antecedentesIntelectualController =
+      TextEditingController();
+  final TextEditingController _antecedentesSocioAfectivoController =
+      TextEditingController();
 
-  final TextEditingController _estructuraFamiliarController = TextEditingController();
+  final TextEditingController _estructuraFamiliarController =
+      TextEditingController();
   final TextEditingController _pruebasController = TextEditingController();
-  final TextEditingController _impresionDiagnosticaController = TextEditingController();
-  final TextEditingController _areasIntervencionController = TextEditingController();
+  final TextEditingController _impresionDiagnosticaController =
+      TextEditingController();
+  final TextEditingController _areasIntervencionController =
+      TextEditingController();
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -105,7 +116,8 @@ class _HistoriaState extends State<Historia> {
         _evaluationDate == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Verifique que todos los campos estén llenos antes de enviar el formulario'),
+          content: Text(
+              'Verifique que todos los campos estén llenos antes de enviar el formulario'),
         ),
       );
       return;
@@ -193,9 +205,7 @@ class _HistoriaState extends State<Historia> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(        
-        
-      ),
+      appBar: AppBar(),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -242,7 +252,7 @@ class _HistoriaState extends State<Historia> {
                         ),
                       ),
                       Align(
-                        alignment: Alignment.center, 
+                        alignment: Alignment.center,
                         child: Text(
                           'HISTORIA CLINICA DE NIÑOS',
                           style: TextStyle(
@@ -257,11 +267,7 @@ class _HistoriaState extends State<Historia> {
                 ],
               ),
             ),
-            
 
-
-
-            
             const SizedBox(height: 20),
             // Sección 1: Datos Personales
             const Text(
@@ -276,7 +282,7 @@ class _HistoriaState extends State<Historia> {
                 border: OutlineInputBorder(),
               ),
             ),
-            
+
             const SizedBox(height: 10),
             // Fecha de nacimiento y cálculo automático de la edad
             Row(
@@ -337,7 +343,7 @@ class _HistoriaState extends State<Historia> {
               children: [
                 Expanded(
                   child: TextFormField(
-                     controller: _nombrePapaController,
+                    controller: _nombrePapaController,
                     decoration: const InputDecoration(
                       labelText: 'Nombre del Papá',
                       border: OutlineInputBorder(),
@@ -467,16 +473,16 @@ class _HistoriaState extends State<Historia> {
             ),
             const SizedBox(height: 10),
             TextFormField(
-               controller: _antecedentesEmbarazoController,
+              controller: _antecedentesEmbarazoController,
               maxLines: 1,
               decoration: const InputDecoration(
                 labelText: 'Datos de embarazo y parto.',
                 border: OutlineInputBorder(),
               ),
             ),
-              const SizedBox(height: 5),
+            const SizedBox(height: 5),
             TextFormField(
-               controller: _antecedentesPsicomotorController,
+              controller: _antecedentesPsicomotorController,
               maxLines: 1,
               decoration: const InputDecoration(
                 labelText: 'Desarrollo Psicomotor.',
@@ -485,16 +491,16 @@ class _HistoriaState extends State<Historia> {
             ),
             const SizedBox(height: 5),
             TextFormField(
-               controller: _antecedentesLenguajeController,
+              controller: _antecedentesLenguajeController,
               maxLines: 1,
               decoration: const InputDecoration(
                 labelText: 'Desarrollo del lenguaje.',
                 border: OutlineInputBorder(),
               ),
             ),
-              const SizedBox(height: 5),
+            const SizedBox(height: 5),
             TextFormField(
-               controller: _antecedentesIntelectualController,
+              controller: _antecedentesIntelectualController,
               maxLines: 1,
               decoration: const InputDecoration(
                 labelText: 'Desarrollo Intelectual.',
@@ -503,7 +509,7 @@ class _HistoriaState extends State<Historia> {
             ),
             const SizedBox(height: 5),
             TextFormField(
-               controller: _antecedentesSocioAfectivoController,
+              controller: _antecedentesSocioAfectivoController,
               maxLines: 1,
               decoration: const InputDecoration(
                 labelText: 'Desarrollo Socio-Afectivo.',

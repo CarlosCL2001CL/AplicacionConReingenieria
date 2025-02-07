@@ -6,9 +6,12 @@ import 'package:flutter_application_1/firebase_options.dart';
 import 'Historia.dart';
 import 'HistoriaAdult.dart';
 import 'HistoriaT.dart';
+import 'HistoriaT2.dart';
+import 'HistoriaT3.dart';
 import 'LoginPage.dart';
 import 'BuscarHistoriaPs.dart';
-
+import 'ChangeEmailPage.dart';
+import 'ChangePasswordPage.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -139,7 +142,7 @@ class TerapiaTab extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          SizedBox(height: 100),
+          SizedBox(height: 50),
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -160,7 +163,7 @@ class TerapiaTab extends StatelessWidget {
                       textAlign: TextAlign.center,
                     ),
                     Text(
-                      '"SAN MIGUEL" FUNESAMI',
+                      '"UNA MIRADA FELIZ"',
                       style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
@@ -212,7 +215,7 @@ class TerapiaTab extends StatelessWidget {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => HistoriaAdult()),
+                    MaterialPageRoute(builder: (context) => HistoriaT3()),
                   );
                 },
                 child: Column(
@@ -241,7 +244,7 @@ class TerapiaTab extends StatelessWidget {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => Historia()),
+                    MaterialPageRoute(builder: (context) => HistoriaT2()),
                   );
                 },
                 child: Column(
@@ -298,7 +301,7 @@ class PsicologiaTab extends StatelessWidget {
                       textAlign: TextAlign.center,
                     ),
                     Text(
-                      '"SAN MIGUEL" FUNESAMI',
+                      '"UNA MIRADA FELIZ"',
                       style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
@@ -350,7 +353,7 @@ class PsicologiaTab extends StatelessWidget {
                   ],
                 ),
               ),
-              SizedBox(width: 30),              
+              SizedBox(width: 30),
               GestureDetector(
                 onTap: () {
                   Navigator.push(
@@ -372,13 +375,11 @@ class PsicologiaTab extends StatelessWidget {
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
                     ),
                   ],
-                ),                
-              ),                
-            ],    
+                ),
+              ),
+            ],
           ),
           SizedBox(height: 35),
-
-
           Row(
             children: [
               GestureDetector(
@@ -402,11 +403,10 @@ class PsicologiaTab extends StatelessWidget {
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
                     ),
                   ],
-                ),                
+                ),
               ),
             ],
           )
-
         ],
       ),
     );
@@ -435,14 +435,13 @@ class _InicioTabState extends State<InicioTab> {
       String uid = user.uid;
 
       // Accede a Firestore y obtén los datos del usuario
-      DocumentSnapshot<Map<String, dynamic>> userDoc = await FirebaseFirestore.instance
-          .collection('users')
-          .doc(uid)
-          .get();
+      DocumentSnapshot<Map<String, dynamic>> userDoc =
+          await FirebaseFirestore.instance.collection('users').doc(uid).get();
 
       if (userDoc.exists) {
         setState(() {
-          fullName = userDoc.data()?['full_name'] ?? 'Usuario'; // Actualiza el nombre si existe
+          fullName = userDoc.data()?['full_name'] ??
+              'Usuario'; // Actualiza el nombre si existe
         });
       }
     }
@@ -469,7 +468,7 @@ class _InicioTabState extends State<InicioTab> {
                     textAlign: TextAlign.center,
                   ),
                   Text(
-                    'SAN MIGUEL - FUNESAMI',
+                    '"UNA MIRADA FELIZ"',
                     style: TextStyle(
                       fontSize: 16,
                       color: Colors.grey,
@@ -479,7 +478,7 @@ class _InicioTabState extends State<InicioTab> {
                 ],
               ),
               const SizedBox(height: 20),
-              
+
               // Bienvenida con el nombre del usuario
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -500,18 +499,46 @@ class _InicioTabState extends State<InicioTab> {
                 ],
               ),
               const SizedBox(height: 20),
-              
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ChangeEmailPage()),
+                      );
+                    },
+                    child: Text('Cambiar correo'),
+                  ),
+                  SizedBox(width: 10),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ChangePasswordPage()),
+                      );
+                    },
+                    child: Text('Cambiar contraseña'),
+                  ),
+                ],
+              ),
+
+              const SizedBox(height: 20),
+
               // Imagen del ángel
               Image.asset(
                 'assets/imagenes/san-miguel.png', // Ruta de la imagen
                 width: 350,
-                height: 450,
+                height: 350,
               ),
             ],
           ),
         ),
         const SizedBox(height: 10),
-        
+
         // Pie de página con el crédito de desarrollo
         Row(
           mainAxisAlignment: MainAxisAlignment.center,

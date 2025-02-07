@@ -16,9 +16,7 @@ class _HistoriaAdultState extends State<HistoriaAdult> {
 
   final TextEditingController _nombreController = TextEditingController();
   final TextEditingController _cursoController = TextEditingController();
-  final TextEditingController _institucionController = TextEditingController();
-  final TextEditingController _nombrePapaController = TextEditingController();
-  final TextEditingController _nombreMamaController = TextEditingController();
+  final TextEditingController _institucionController = TextEditingController();  
   final TextEditingController _direccionController = TextEditingController();
   final TextEditingController _telefonoController = TextEditingController();
   final TextEditingController _remisionController = TextEditingController();
@@ -78,9 +76,7 @@ class _HistoriaAdultState extends State<HistoriaAdult> {
     // Verificación de que todos los campos estén llenos
     if (_nombreController.text.isEmpty ||
         _cursoController.text.isEmpty ||
-        _institucionController.text.isEmpty ||
-        _nombrePapaController.text.isEmpty ||
-        _nombreMamaController.text.isEmpty ||
+        _institucionController.text.isEmpty ||       
         _direccionController.text.isEmpty ||
         _telefonoController.text.isEmpty ||
         _remisionController.text.isEmpty ||
@@ -120,9 +116,7 @@ class _HistoriaAdultState extends State<HistoriaAdult> {
         'fechaNacimiento': _selectedDate!.toIso8601String(),
         'edad': _age,
         'curso': _cursoController.text,
-        'institucion': _institucionController.text,
-        'nombrePapa': _nombrePapaController.text,
-        'nombreMama': _nombreMamaController.text,
+        'institucion': _institucionController.text,       
         'direccion': _direccionController.text,
         'telefono': _telefonoController.text,
         'remision': _remisionController.text,
@@ -147,9 +141,7 @@ class _HistoriaAdultState extends State<HistoriaAdult> {
       // Limpiar el formulario y resetear los campos
       _nombreController.clear();
       _cursoController.clear();
-      _institucionController.clear();
-      _nombrePapaController.clear();
-      _nombreMamaController.clear();
+      _institucionController.clear();      
       _direccionController.clear();
       _telefonoController.clear();
       _remisionController.clear();
@@ -316,32 +308,7 @@ class _HistoriaAdultState extends State<HistoriaAdult> {
                 border: OutlineInputBorder(),
               ),
             ),
-            const SizedBox(height: 10),
-            // Nombres de los padres
-            Row(
-              children: [
-                Expanded(
-                  child: TextFormField(
-                     controller: _nombrePapaController,
-                    decoration: const InputDecoration(
-                      labelText: 'Nombre del Papá',
-                      border: OutlineInputBorder(),
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: TextFormField(
-                    controller: _nombreMamaController,
-                    decoration: const InputDecoration(
-                      labelText: 'Nombre de la Mamá',
-                      border: OutlineInputBorder(),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 10),
+            const SizedBox(height: 10),            
             // Dirección
             TextFormField(
               controller: _direccionController,

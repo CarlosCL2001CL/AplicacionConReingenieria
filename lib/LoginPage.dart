@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'Home.dart'; // Asegúrate de que este archivo exista
 import 'RegisterPage.dart'; // Importa el archivo de registro
+import 'ResetPasswordPage.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -41,13 +42,15 @@ class _LoginPageState extends State<LoginPage> {
             .get();
 
         if (userDoc.exists) {
-          String userRol = userDoc['role']; // Asegúrate de que el campo 'rol' esté en el documento de Firestore
+          String userRol = userDoc[
+              'role']; // Asegúrate de que el campo 'rol' esté en el documento de Firestore
 
           // Navegar a la página principal pasando el rol del usuario
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-              builder: (context) => MyHomePage(userRol: userRol), // Pasa el rol a la página principal
+              builder: (context) => MyHomePage(
+                  userRol: userRol), // Pasa el rol a la página principal
             ),
           );
         } else {
@@ -67,13 +70,15 @@ class _LoginPageState extends State<LoginPage> {
           errorMessage = 'El usuario ha sido deshabilitado.';
           break;
         case 'user-not-found':
-          errorMessage = 'No se encontró un usuario con ese correo electrónico.';
+          errorMessage =
+              'No se encontró un usuario con ese correo electrónico.';
           break;
         case 'wrong-password':
           errorMessage = 'Contraseña incorrecta.';
           break;
         default:
-          errorMessage = 'Ocurrió un error inesperado (${e.code}). Intente nuevamente.';
+          errorMessage =
+              'Ocurrió un error inesperado (${e.code}). Intente nuevamente.';
       }
 
       // Mostrar mensaje de error en el UI
@@ -88,6 +93,32 @@ class _LoginPageState extends State<LoginPage> {
       setState(() {
         _isLoading = false; // Detener indicador de carga
       });
+    }
+  }
+
+  Future<void> _resetPassword() async {
+    if (_emailController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+            content: Text(
+                'Por favor, ingrese su correo electrónico para restablecer la contraseña')),
+      );
+      return;
+    }
+
+    try {
+      await _auth.sendPasswordResetEmail(email: _emailController.text);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+            content: Text(
+                'Se ha enviado un enlace para restablecer la contraseña a su correo electrónico')),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+            content:
+                Text('Error al intentar enviar el enlace: ${e.toString()}')),
+      );
     }
   }
 
@@ -131,7 +162,8 @@ class _LoginPageState extends State<LoginPage> {
                           width: 70,
                           height: 100,
                         ),
-                        SizedBox(width: 10), // Espacio entre la imagen y el texto
+                        SizedBox(
+                            width: 10), // Espacio entre la imagen y el texto
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.center,
@@ -145,7 +177,7 @@ class _LoginPageState extends State<LoginPage> {
                                 textAlign: TextAlign.center,
                               ),
                               Text(
-                                '"SAN MIGUEL" FUNESAMI',
+                                '"UNA MIRADA FELIZ"',
                                 style: TextStyle(
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold,
@@ -209,12 +241,14 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     SizedBox(height: 20),
 
+                    // Botón para iniciar sesión
                     _isLoading
                         ? CircularProgressIndicator()
                         : ElevatedButton(
                             onPressed: _login,
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.blueAccent, // Color del botón
+                              backgroundColor:
+                                  Colors.blueAccent, // Color del botón
                               padding: EdgeInsets.symmetric(
                                   vertical: 15, horizontal: 80),
                               shape: RoundedRectangleBorder(
@@ -229,13 +263,37 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                     SizedBox(height: 10),
 
+                    // Enlace para recuperar la contraseña
+                    InkWell(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  ResetPasswordPage()), // Navegar a la página de reset password
+                        );
+                      },
+                      child: Text(
+                        '¿Olvidaste tu contraseña?',
+                        style: TextStyle(
+                          decoration: TextDecoration.underline,
+                          color: Colors.blueAccent,
+                          fontSize: 16,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+
+                    SizedBox(height: 10),
+
                     // Enlace a la página de registro
                     InkWell(
                       onTap: () {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => RegisterPage()), // Asegúrate de que RegisterPage esté definido
+                              builder: (context) =>
+                                  RegisterPage()), // Asegúrate de que RegisterPage esté definido
                         );
                       },
                       child: Text(

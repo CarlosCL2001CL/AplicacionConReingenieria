@@ -25,7 +25,7 @@ dev_dependencies:
 flutter_icons:
   android: true
   ios: true
-  image_path: "assets/imagenes/icono.png"
+  image_path: "assets/imagenes/san-miguel.png"
 
 flutter:
   uses-material-design: true
@@ -36,7 +36,6 @@ flutter:
     - assets/imagenes/nino.png
     - assets/imagenes/historia-clinica.png
     - assets/imagenes/voz.png
-    - assets/imagenes/icono.png
     - assets/imagenes/buscar.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
