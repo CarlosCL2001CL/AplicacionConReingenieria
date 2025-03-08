@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart'; // Asegúrate de importar Firestore
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'LoginPage.dart'; // Asegúrate de que este archivo exista
 
 class RegisterPage extends StatefulWidget {
   @override
@@ -18,11 +17,36 @@ class _RegisterPageState extends State<RegisterPage> {
 
   String? _selectedRole; // Para almacenar el rol seleccionado
   bool _isLoading = false; // Para mostrar un indicador de carga
+  bool _isPasswordVisible = false; // Para controlar la visibilidad de la contraseña
+  bool _isConfirmPasswordVisible = false; // Para controlar la visibilidad de la confirmación de la contraseña
+
+  // Función para validar la contraseña
+  String? _validatePassword(String? password) {
+    if (password == null || password.isEmpty) {
+      return 'La contraseña es requerida';
+    }
+    if (password.length < 12) {
+      return 'La contraseña debe tener al menos 12 caracteres';
+    }
+    if (!RegExp(r'^(?=.*[a-z])').hasMatch(password)) {
+      return 'La contraseña debe contener al menos una letra minúscula';
+    }
+    if (!RegExp(r'^(?=.*[A-Z])').hasMatch(password)) {
+      return 'La contraseña debe contener al menos una letra mayúscula';
+    }
+    if (!RegExp(r'^(?=.*[0-9])').hasMatch(password)) {
+      return 'La contraseña debe contener al menos un número';
+    }
+    if (!RegExp(r'^(?=.*[!@#$%^&*(),.?":{}|<>])').hasMatch(password)) {
+      return 'La contraseña debe contener al menos un carácter especial';
+    }
+    return null;
+  }
 
   Future<void> _register() async {
-    if (_fullNameController.text.isEmpty || 
-        _emailController.text.isEmpty || 
-        _passwordController.text.isEmpty || 
+    if (_fullNameController.text.isEmpty ||
+        _emailController.text.isEmpty ||
+        _passwordController.text.isEmpty ||
         _confirmPasswordController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Por favor, complete todos los campos')),
@@ -30,9 +54,31 @@ class _RegisterPageState extends State<RegisterPage> {
       return;
     }
 
+    if (_fullNameController.text.length < 10) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('El nombre completo debe tener al menos 10 caracteres')),
+      );
+      return;
+    }
+
+    if (!_emailController.text.contains('@')) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Por favor, ingrese un correo electrónico válido')),
+      );
+      return;
+    }
+
     if (_passwordController.text != _confirmPasswordController.text) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Las contraseñas no coinciden')),
+      );
+      return;
+    }
+
+    String? passwordError = _validatePassword(_passwordController.text);
+    if (passwordError != null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(passwordError)),
       );
       return;
     }
@@ -61,19 +107,44 @@ class _RegisterPageState extends State<RegisterPage> {
 
       // Almacenar la información del usuario en Firestore
       await _firestore.collection('users').doc(userCredential.user!.uid).set({
-        'full_name': _fullNameController.text, // Guardar el nombre completo
+        'full_name': _fullNameController.text,
         'email': _emailController.text,
-        'role': _selectedRole, // Guardar el rol seleccionado
-        'uid': userCredential.user!.uid, // Guardar el UID del usuario
+        'role': _selectedRole,
+        'uid': userCredential.user!.uid,
       });
 
-      // Navegar a la página de inicio de sesión después del registro exitoso
-      if (userCredential.user != null) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => LoginPage()), // Redirige a la página de login
-        );
-      }
+      // Mostrar mensaje de éxito con showDialog
+      showDialog(
+        context: context,
+        barrierDismissible: false, // Evita que se cierre tocando fuera
+        builder: (context) {
+          return AlertDialog(
+            title: Text('Registro Exitoso 🎉'),
+            content: Text(
+              'Correo: ${_emailController.text}\n'
+              'Contraseña: ${_passwordController.text}',
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop(); // Cerrar el diálogo
+
+                  // Limpiar los campos después de cerrar el diálogo
+                  _fullNameController.clear();
+                  _emailController.clear();
+                  _passwordController.clear();
+                  _confirmPasswordController.clear();
+
+                  setState(() {
+                    _selectedRole = null; // Restablecer el rol seleccionado
+                  });
+                },
+                child: Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
     } on FirebaseAuthException catch (e) {
       String errorMessage;
 
@@ -116,8 +187,7 @@ class _RegisterPageState extends State<RegisterPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              SizedBox(height: 150),
-
+              SizedBox(height: 10),
               Container(
                 padding: EdgeInsets.all(20),
                 decoration: BoxDecoration(
@@ -138,51 +208,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     Container(
                       padding: EdgeInsets.all(8),
                     ),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Image.asset(
-                          'assets/imagenes/san-miguel.png', // Imagen del ángel
-                          width: 70,
-                          height: 100,
-                        ),
-                        SizedBox(width: 10), // Espacio entre la imagen y el texto
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Text(
-                                'Fundación de niños especiales',
-                                style: TextStyle(
-                                  fontSize: 19,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                                textAlign: TextAlign.center,
-                              ),
-                              Text(
-                                '"SAN MIGUEL" FUNESAMI',
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.grey[600],
-                                ),
-                                textAlign: TextAlign.center,
-                              ),
-                              SizedBox(height: 5),
-                              Text(
-                                'Gestión de Historias clínicas',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  color: Color.fromARGB(255, 92, 60, 60),
-                                ),
-                                textAlign: TextAlign.center,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 20),
+                    // (Imagen y texto del encabezado se mantienen iguales)
 
                     // Campo para el nombre completo
                     TextField(
@@ -222,7 +248,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     // Campo de contraseña
                     TextField(
                       controller: _passwordController,
-                      obscureText: true,
+                      obscureText: !_isPasswordVisible,
                       decoration: InputDecoration(
                         prefixIcon: Icon(Icons.lock_outline, color: Colors.blueAccent),
                         labelText: 'Contraseña',
@@ -233,6 +259,17 @@ class _RegisterPageState extends State<RegisterPage> {
                         focusedBorder: UnderlineInputBorder(
                           borderSide: BorderSide(color: Colors.blueAccent, width: 2),
                         ),
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            _isPasswordVisible ? Icons.visibility : Icons.visibility_off,
+                            color: Colors.blueAccent,
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              _isPasswordVisible = !_isPasswordVisible;
+                            });
+                          },
+                        ),
                       ),
                     ),
                     SizedBox(height: 20),
@@ -240,7 +277,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     // Campo de confirmación de contraseña
                     TextField(
                       controller: _confirmPasswordController,
-                      obscureText: true,
+                      obscureText: !_isConfirmPasswordVisible,
                       decoration: InputDecoration(
                         prefixIcon: Icon(Icons.lock_outline, color: Colors.blueAccent),
                         labelText: 'Confirmar contraseña',
@@ -250,6 +287,17 @@ class _RegisterPageState extends State<RegisterPage> {
                         ),
                         focusedBorder: UnderlineInputBorder(
                           borderSide: BorderSide(color: Colors.blueAccent, width: 2),
+                        ),
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            _isConfirmPasswordVisible ? Icons.visibility : Icons.visibility_off,
+                            color: Colors.blueAccent,
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              _isConfirmPasswordVisible = !_isConfirmPasswordVisible;
+                            });
+                          },
                         ),
                       ),
                     ),
@@ -287,27 +335,15 @@ class _RegisterPageState extends State<RegisterPage> {
                             onPressed: _register,
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.blueAccent,
-                              padding: EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+                              padding: EdgeInsets.symmetric(
+                                  vertical: 12, horizontal: 24),
                             ),
                             child: Text(
-                              'Registrarse',
+                              'Registrar',
                               style: TextStyle(color: Colors.white),
                             ),
                           ),
                     SizedBox(height: 20),
-
-                    TextButton(
-                      onPressed: () {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(builder: (context) => LoginPage()),
-                        );
-                      },
-                      child: Text(
-                        '¿Ya tienes una cuenta? Inicia sesión',
-                        style: TextStyle(color: Colors.blueAccent),
-                      ),
-                    ),
                   ],
                 ),
               ),

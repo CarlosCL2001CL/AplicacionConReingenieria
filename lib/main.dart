@@ -1,7 +1,13 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/ChangeEmailPage.dart';
+import 'package:flutter_application_1/ChangePasswordPage.dart';
+import 'package:flutter_application_1/Home.dart';
+import 'package:flutter_application_1/LoginPage.dart';
+import 'package:flutter_application_1/RegisterPage.dart';
 import 'package:flutter_application_1/firebase_options.dart';
-import 'LoginPage.dart'; // Asegúrate de que este archivo exista
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,6 +27,9 @@ class MyApp extends StatelessWidget {
         primaryColor: Color.fromARGB(214, 232, 56, 56),
       ),
       home: LoginPage(), // Cambiar a LoginPage
+      
     );
   }
 }
+
+

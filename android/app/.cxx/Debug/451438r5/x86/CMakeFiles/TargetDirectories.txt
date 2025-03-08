@@ -1,0 +1,2 @@
+F:/Moviles Tesis/CarpetasCodeForms/AppLimpia2.0 - APP completa 100%/admin_application_1/android/app/.cxx/Debug/451438r5/x86/CMakeFiles/edit_cache.dir
+F:/Moviles Tesis/CarpetasCodeForms/AppLimpia2.0 - APP completa 100%/admin_application_1/android/app/.cxx/Debug/451438r5/x86/CMakeFiles/rebuild_cache.dir

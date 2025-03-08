@@ -15,6 +15,7 @@ class _HistoriaState extends State<Historia> {
   int _age = 0;
 
   final TextEditingController _nombreController = TextEditingController();
+  final TextEditingController _cedulaController = TextEditingController();
   final TextEditingController _cursoController = TextEditingController();
   final TextEditingController _institucionController = TextEditingController();
   final TextEditingController _nombrePapaController = TextEditingController();
@@ -91,6 +92,7 @@ class _HistoriaState extends State<Historia> {
   Future<void> _submitForm() async {
     // Verificación de que todos los campos estén llenos
     if (_nombreController.text.isEmpty ||
+        _cedulaController.text.isEmpty ||
         _cursoController.text.isEmpty ||
         _institucionController.text.isEmpty ||
         _nombrePapaController.text.isEmpty ||
@@ -136,6 +138,7 @@ class _HistoriaState extends State<Historia> {
     try {
       await FirebaseFirestore.instance.collection('HistoriaNinos').add({
         'nombres': _nombreController.text,
+        'cedula': _cedulaController.text,
         'fechaNacimiento': _selectedDate!.toIso8601String(),
         'edad': _age,
         'curso': _cursoController.text,
@@ -168,6 +171,7 @@ class _HistoriaState extends State<Historia> {
       );
 
       // Limpiar el formulario y resetear los campos
+      _nombreController.clear();
       _nombreController.clear();
       _cursoController.clear();
       _institucionController.clear();
@@ -226,14 +230,14 @@ class _HistoriaState extends State<Historia> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: const [
                       Text(
-                        'FUNDACIÓN DE NIÑOS ESPECIALES',
+                        '            FUNDACIÓN',
                         style: TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                       Text(
-                        '“SAN MIGUEL” FUNESAMI',
+                        '"UNA MIRADA FELIZ"',
                         style: TextStyle(
                           fontSize: 19,
                           fontWeight: FontWeight.bold,
@@ -279,6 +283,14 @@ class _HistoriaState extends State<Historia> {
               controller: _nombreController,
               decoration: const InputDecoration(
                 labelText: 'Nombres y Apellidos',
+                border: OutlineInputBorder(),
+              ),
+            ),
+            const SizedBox(height: 10),
+            TextFormField(
+              controller: _cedulaController,
+              decoration: const InputDecoration(
+                labelText: 'CEDULA',
                 border: OutlineInputBorder(),
               ),
             ),

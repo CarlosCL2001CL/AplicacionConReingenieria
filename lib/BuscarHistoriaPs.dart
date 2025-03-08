@@ -10,8 +10,11 @@ class BuscarHistoriaPs extends StatefulWidget {
 
 class _BuscarHistoriaPsState extends State<BuscarHistoriaPs> {
   final TextEditingController _nombreController = TextEditingController();
-  final TextEditingController _fechaNacimientoController = TextEditingController();
-  final TextEditingController _evaluationDateController = TextEditingController();
+  final TextEditingController _cedulaController = TextEditingController();
+  final TextEditingController _fechaNacimientoController =
+      TextEditingController();
+  final TextEditingController _evaluationDateController =
+      TextEditingController();
   final TextEditingController _edadController = TextEditingController();
   final TextEditingController _cursoController = TextEditingController();
   final TextEditingController _institucionController = TextEditingController();
@@ -21,55 +24,72 @@ class _BuscarHistoriaPsState extends State<BuscarHistoriaPs> {
   final TextEditingController _telefonoController = TextEditingController();
   final TextEditingController _remisionController = TextEditingController();
   final TextEditingController _coberturaController = TextEditingController();
-  final TextEditingController _observacionesController = TextEditingController();
+  final TextEditingController _observacionesController =
+      TextEditingController();
   final TextEditingController _responsableController = TextEditingController();
-  final TextEditingController _motivoConsultaController = TextEditingController();
-  final TextEditingController _desencadenantesController = TextEditingController();
-  final TextEditingController _antecedentesGController = TextEditingController();
-  final TextEditingController _antecedentesEmbarazoController = TextEditingController();
-  final TextEditingController _antecedentesPsicomotorController = TextEditingController();
-  final TextEditingController _antecedentesLenguajeController = TextEditingController();
-  final TextEditingController _antecedentesIntelectualController = TextEditingController();
-  final TextEditingController _antecedentesSocioAfectivoController = TextEditingController();
-  final TextEditingController _estructuraFamiliarController = TextEditingController();
+  final TextEditingController _motivoConsultaController =
+      TextEditingController();
+  final TextEditingController _desencadenantesController =
+      TextEditingController();
+  final TextEditingController _antecedentesGController =
+      TextEditingController();
+  final TextEditingController _antecedentesEmbarazoController =
+      TextEditingController();
+  final TextEditingController _antecedentesPsicomotorController =
+      TextEditingController();
+  final TextEditingController _antecedentesLenguajeController =
+      TextEditingController();
+  final TextEditingController _antecedentesIntelectualController =
+      TextEditingController();
+  final TextEditingController _antecedentesSocioAfectivoController =
+      TextEditingController();
+  final TextEditingController _estructuraFamiliarController =
+      TextEditingController();
   final TextEditingController _pruebasController = TextEditingController();
-  final TextEditingController _impresionDiagnosticaController = TextEditingController();
-  final TextEditingController _areasIntervencionController = TextEditingController();
+  final TextEditingController _impresionDiagnosticaController =
+      TextEditingController();
+  final TextEditingController _areasIntervencionController =
+      TextEditingController();
 
   Map<String, dynamic>? _historiaEncontrada;
   bool _busquedaRealizada = false;
   bool _modoEdicion = false; // Variable para controlar el modo de edición
-  String? _coleccionSeleccionada; // Almacena la colección de donde se encontró el documento
+  String?
+      _coleccionSeleccionada; // Almacena la colección de donde se encontró el documento
 
   void _buscarHistoriaPorNombre() async {
-    String nombrePaciente = _nombreController.text.trim();
+    String nombrePaciente = _cedulaController.text.trim();
 
     if (nombrePaciente.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('INGRESE EL NOMBRE DEL PACIENTE')),
+        const SnackBar(content: Text('INGRESE LA CEDULA')),
       );
       return;
     }
 
     // Buscamos en la colección 'HistoriaNinos'
-    QuerySnapshot<Map<String, dynamic>> resultadoNinos = await FirebaseFirestore.instance
+    QuerySnapshot<Map<String, dynamic>> resultadoNinos = await FirebaseFirestore
+        .instance
         .collection('HistoriaNinos')
-        .where('nombres', isEqualTo: nombrePaciente)
+        .where('cedula', isEqualTo: nombrePaciente)
         .get();
 
     // Si no encontramos resultados en 'HistoriaNinos', buscamos en 'HistoriaAdult'
     if (resultadoNinos.docs.isEmpty) {
-      QuerySnapshot<Map<String, dynamic>> resultadoAdult = await FirebaseFirestore.instance
-          .collection('HistoriaAdult')
-          .where('nombres', isEqualTo: nombrePaciente)
-          .get();
+      QuerySnapshot<Map<String, dynamic>> resultadoAdult =
+          await FirebaseFirestore.instance
+              .collection('HistoriaAdult')
+              .where('cedula', isEqualTo: nombrePaciente)
+              .get();
 
       if (resultadoAdult.docs.isNotEmpty) {
         setState(() {
           _busquedaRealizada = true;
           _historiaEncontrada = resultadoAdult.docs.first.data();
-          _historiaEncontrada!['idDocumento'] = resultadoAdult.docs.first.id; // Captura el ID del documento
-          _coleccionSeleccionada = 'HistoriaAdult'; // Guardamos la colección seleccionada
+          _historiaEncontrada!['idDocumento'] =
+              resultadoAdult.docs.first.id; // Captura el ID del documento
+          _coleccionSeleccionada =
+              'HistoriaAdult'; // Guardamos la colección seleccionada
           _llenarCamposControllers(); // Llenamos los controladores con los datos obtenidos
         });
       } else {
@@ -79,15 +99,18 @@ class _BuscarHistoriaPsState extends State<BuscarHistoriaPs> {
           _historiaEncontrada = null; // No se encontró historia
         });
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('No se encontró ninguna historia clínica.')),
+          const SnackBar(
+              content: Text('No se encontró ninguna historia clínica.')),
         );
       }
     } else {
       setState(() {
         _busquedaRealizada = true;
         _historiaEncontrada = resultadoNinos.docs.first.data();
-        _historiaEncontrada!['idDocumento'] = resultadoNinos.docs.first.id; // Captura el ID del documento
-        _coleccionSeleccionada = 'HistoriaNinos'; // Guardamos la colección seleccionada
+        _historiaEncontrada!['idDocumento'] =
+            resultadoNinos.docs.first.id; // Captura el ID del documento
+        _coleccionSeleccionada =
+            'HistoriaNinos'; // Guardamos la colección seleccionada
         _llenarCamposControllers(); // Llenamos los controladores con los datos obtenidos
       });
     }
@@ -97,7 +120,8 @@ class _BuscarHistoriaPsState extends State<BuscarHistoriaPs> {
   void _llenarCamposControllers() {
     if (_historiaEncontrada != null) {
       _nombreController.text = _historiaEncontrada!['nombres'] ?? '';
-      _fechaNacimientoController.text = _historiaEncontrada!['fechaNacimiento'] ?? '';
+      _fechaNacimientoController.text =
+          _historiaEncontrada!['fechaNacimiento'] ?? '';
       _edadController.text = _historiaEncontrada!['edad'].toString();
       _cursoController.text = _historiaEncontrada!['curso'] ?? '';
       _institucionController.text = _historiaEncontrada!['institucion'] ?? '';
@@ -105,23 +129,36 @@ class _BuscarHistoriaPsState extends State<BuscarHistoriaPs> {
       _nombrePapaController.text = _historiaEncontrada!['nombrePapa'] ?? '';
       _direccionController.text = _historiaEncontrada!['direccion'] ?? '';
       _telefonoController.text = _historiaEncontrada!['telefono'] ?? '';
-      _observacionesController.text = _historiaEncontrada!['observaciones'] ?? '';
+      _observacionesController.text =
+          _historiaEncontrada!['observaciones'] ?? '';
       _remisionController.text = _historiaEncontrada!['remision'] ?? '';
-      _evaluationDateController.text = _historiaEncontrada!['fechaEvaluacion'] ?? '';
+      _evaluationDateController.text =
+          _historiaEncontrada!['fechaEvaluacion'] ?? '';
       _coberturaController.text = _historiaEncontrada!['cobertura'] ?? '';
       _responsableController.text = _historiaEncontrada!['responsable'] ?? '';
-      _motivoConsultaController.text = _historiaEncontrada!['motivoConsulta'] ?? '';
-      _desencadenantesController.text = _historiaEncontrada!['desencadenantes'] ?? '';
-      _antecedentesGController.text = _historiaEncontrada!['antecedenteG'] ?? '';
-      _antecedentesEmbarazoController.text = _historiaEncontrada!['DatosEmbarazo'] ?? '';
-      _antecedentesPsicomotorController.text = _historiaEncontrada!['DatosPsicomotor'] ?? '';
-      _antecedentesLenguajeController.text = _historiaEncontrada!['DatosLenguaje'] ?? '';
-      _antecedentesIntelectualController.text = _historiaEncontrada!['DatosIntelectual'] ?? '';
-      _antecedentesSocioAfectivoController.text = _historiaEncontrada!['DatosSocioAfectivo'] ?? '';
-      _estructuraFamiliarController.text = _historiaEncontrada!['estructuraFamiliar'] ?? '';
+      _motivoConsultaController.text =
+          _historiaEncontrada!['motivoConsulta'] ?? '';
+      _desencadenantesController.text =
+          _historiaEncontrada!['desencadenantes'] ?? '';
+      _antecedentesGController.text =
+          _historiaEncontrada!['antecedenteG'] ?? '';
+      _antecedentesEmbarazoController.text =
+          _historiaEncontrada!['DatosEmbarazo'] ?? '';
+      _antecedentesPsicomotorController.text =
+          _historiaEncontrada!['DatosPsicomotor'] ?? '';
+      _antecedentesLenguajeController.text =
+          _historiaEncontrada!['DatosLenguaje'] ?? '';
+      _antecedentesIntelectualController.text =
+          _historiaEncontrada!['DatosIntelectual'] ?? '';
+      _antecedentesSocioAfectivoController.text =
+          _historiaEncontrada!['DatosSocioAfectivo'] ?? '';
+      _estructuraFamiliarController.text =
+          _historiaEncontrada!['estructuraFamiliar'] ?? '';
       _pruebasController.text = _historiaEncontrada!['pruebas'] ?? '';
-      _impresionDiagnosticaController.text = _historiaEncontrada!['impresionDiagnostica'] ?? '';
-      _areasIntervencionController.text = _historiaEncontrada!['areasIntervencion'] ?? '';
+      _impresionDiagnosticaController.text =
+          _historiaEncontrada!['impresionDiagnostica'] ?? '';
+      _areasIntervencionController.text =
+          _historiaEncontrada!['areasIntervencion'] ?? '';
     }
   }
 
@@ -170,7 +207,8 @@ class _BuscarHistoriaPsState extends State<BuscarHistoriaPs> {
       // Actualiza solo los campos modificados
       try {
         await FirebaseFirestore.instance
-            .collection(_coleccionSeleccionada!) // Usa la colección seleccionada
+            .collection(
+                _coleccionSeleccionada!) // Usa la colección seleccionada
             .doc(idDocumento)
             .update(nuevosDatos);
 
@@ -211,7 +249,8 @@ class _BuscarHistoriaPsState extends State<BuscarHistoriaPs> {
         child: Column(
           children: [
             // Campo para buscar por nombre del paciente
-            _buildCampoConTitulo('Nombre del Paciente', _nombreController, readOnly: false),
+            _buildCampoConTitulo('Ingrese la cedula', _cedulaController,
+                readOnly: false),
             const SizedBox(height: 16.0),
             Row(
               children: [
@@ -225,8 +264,7 @@ class _BuscarHistoriaPsState extends State<BuscarHistoriaPs> {
                     onPressed: _activarEdicion,
                     child: Text(_modoEdicion ? 'Cancelar' : 'Editar'),
                   ),
-                if (_modoEdicion)
-                  const SizedBox(width: 16.0),
+                if (_modoEdicion) const SizedBox(width: 16.0),
                 if (_modoEdicion)
                   ElevatedButton(
                     onPressed: _guardarCambios,
@@ -240,7 +278,8 @@ class _BuscarHistoriaPsState extends State<BuscarHistoriaPs> {
                 child: _busquedaRealizada
                     ? (_historiaEncontrada != null
                         ? _buildHistoriaVista(_historiaEncontrada!)
-                        : const Text('No se ha encontrado ninguna historia clínica.'))
+                        : const Text(
+                            'No se ha encontrado ninguna historia clínica.'))
                     : Container(),
               ),
             ),
@@ -250,7 +289,8 @@ class _BuscarHistoriaPsState extends State<BuscarHistoriaPs> {
     );
   }
 
-  Widget _buildCampoConTitulo(String titulo, TextEditingController controller, {bool readOnly = true}) {
+  Widget _buildCampoConTitulo(String titulo, TextEditingController controller,
+      {bool readOnly = true}) {
     return TextField(
       controller: controller,
       readOnly: readOnly,
@@ -314,7 +354,8 @@ class _BuscarHistoriaPsState extends State<BuscarHistoriaPs> {
     );
   }
 
-  Widget _buildCampoConScroll(String titulo, TextEditingController controller, {bool readOnly = true}) {
+  Widget _buildCampoConScroll(String titulo, TextEditingController controller,
+      {bool readOnly = true}) {
     return Container(
       height: 150, // Ajusta la altura según lo que necesites
       child: TextField(
@@ -335,7 +376,8 @@ class _BuscarHistoriaPsState extends State<BuscarHistoriaPs> {
             borderRadius: BorderRadius.circular(8.0),
           ),
         ),
-        keyboardType: TextInputType.multiline, // Para que el teclado se adapte a texto largo
+        keyboardType: TextInputType
+            .multiline, // Para que el teclado se adapte a texto largo
         textInputAction: TextInputAction.newline, // Permite saltos de línea
       ),
     );
@@ -356,77 +398,104 @@ class _BuscarHistoriaPsState extends State<BuscarHistoriaPs> {
           const SizedBox(height: 16.0),
           _buildSeccionTitulo('DATOS PERSONALES'),
           const Divider(),
-          _buildCampoConTitulo('Nombre completo del paciente', _nombreController, readOnly: !_modoEdicion),
+          _buildCampoConTitulo(
+              'Nombre completo del paciente', _nombreController,
+              readOnly: !_modoEdicion),
           const SizedBox(height: 10),
-          _buildFechaNacimientoYEdad(_fechaNacimientoController.text, _edadController.text),
+          _buildFechaNacimientoYEdad(
+              _fechaNacimientoController.text, _edadController.text),
           const SizedBox(height: 10),
-          _buildCampoConTitulo('Curso escolar Actual', _cursoController, readOnly: !_modoEdicion),
+          _buildCampoConTitulo('Curso escolar Actual', _cursoController,
+              readOnly: !_modoEdicion),
           const SizedBox(height: 10),
-          _buildCampoConTitulo('Institución', _institucionController, readOnly: !_modoEdicion),
+          _buildCampoConTitulo('Institución', _institucionController,
+              readOnly: !_modoEdicion),
           const SizedBox(height: 10),
-          _buildCampoConTitulo('Nombre de la mamá', _nombreMamaController, readOnly: !_modoEdicion),
+          _buildCampoConTitulo('Nombre de la mamá', _nombreMamaController,
+              readOnly: !_modoEdicion),
           const SizedBox(height: 10),
-          _buildCampoConTitulo('Nombre del papá', _nombrePapaController, readOnly: !_modoEdicion),
+          _buildCampoConTitulo('Nombre del papá', _nombrePapaController,
+              readOnly: !_modoEdicion),
           const SizedBox(height: 10),
-          _buildCampoConTitulo('Dirección', _direccionController, readOnly: !_modoEdicion),
+          _buildCampoConTitulo('Dirección', _direccionController,
+              readOnly: !_modoEdicion),
           const SizedBox(height: 10),
-          _buildCampoConTitulo('Teléfono', _telefonoController, readOnly: !_modoEdicion),
+          _buildCampoConTitulo('Teléfono', _telefonoController,
+              readOnly: !_modoEdicion),
           const SizedBox(height: 10),
-          _buildCampoConTitulo('Remisión', _remisionController, readOnly: !_modoEdicion),
+          _buildCampoConTitulo('Remisión', _remisionController,
+              readOnly: !_modoEdicion),
           const SizedBox(height: 10),
-          _buildCampoConTitulo('Fecha de evaluación', _evaluationDateController, readOnly: !_modoEdicion),
+          _buildCampoConTitulo('Fecha de evaluación', _evaluationDateController,
+              readOnly: !_modoEdicion),
           const SizedBox(height: 10),
-          _buildCampoConTitulo('Final de cobertura', _coberturaController, readOnly: !_modoEdicion),
+          _buildCampoConTitulo('Final de cobertura', _coberturaController,
+              readOnly: !_modoEdicion),
           const SizedBox(height: 10),
-          _buildCampoConScroll('Observación', _observacionesController, readOnly: !_modoEdicion),
+          _buildCampoConScroll('Observación', _observacionesController,
+              readOnly: !_modoEdicion),
           const SizedBox(height: 10),
-          _buildCampoConTitulo('Responsable', _responsableController, readOnly: !_modoEdicion),
+          _buildCampoConTitulo('Responsable', _responsableController,
+              readOnly: !_modoEdicion),
           const SizedBox(height: 16.0),
-
           _buildSeccionTitulo('MOTIVO DE CONSULTA'),
           const Divider(),
-          _buildCampoConScroll('Motivo de consulta', _motivoConsultaController, readOnly: !_modoEdicion),
+          _buildCampoConScroll('Motivo de consulta', _motivoConsultaController,
+              readOnly: !_modoEdicion),
           const SizedBox(height: 16.0),
-
           _buildSeccionTitulo('DESENCADENANTES DE MOTIVO DE CONSULTA'),
           const Divider(),
-          _buildCampoConScroll('Desencadenante de Consulta', _desencadenantesController, readOnly: !_modoEdicion),
+          _buildCampoConScroll(
+              'Desencadenante de Consulta', _desencadenantesController,
+              readOnly: !_modoEdicion),
           const SizedBox(height: 16.0),
-
           _buildSeccionTitulo('ANTECEDENTES FAMILIARES'),
           const Divider(),
-          _buildCampoConScroll('SOLO SI ES ADULTO', _antecedentesGController, readOnly: !_modoEdicion),
+          _buildCampoConScroll('SOLO SI ES ADULTO', _antecedentesGController,
+              readOnly: !_modoEdicion),
           const SizedBox(height: 16.0),
-
-          _buildCampoConTitulo('Datos de embarazo y parto', _antecedentesEmbarazoController, readOnly: !_modoEdicion),
+          _buildCampoConTitulo(
+              'Datos de embarazo y parto', _antecedentesEmbarazoController,
+              readOnly: !_modoEdicion),
           const SizedBox(height: 10.0),
-          _buildCampoConTitulo('Datos Psicomotor', _antecedentesPsicomotorController, readOnly: !_modoEdicion),
+          _buildCampoConTitulo(
+              'Datos Psicomotor', _antecedentesPsicomotorController,
+              readOnly: !_modoEdicion),
           const SizedBox(height: 10.0),
-          _buildCampoConTitulo('Desarrollo del lenguaje', _antecedentesLenguajeController, readOnly: !_modoEdicion),
+          _buildCampoConTitulo(
+              'Desarrollo del lenguaje', _antecedentesLenguajeController,
+              readOnly: !_modoEdicion),
           const SizedBox(height: 10.0),
-          _buildCampoConTitulo('Desarrollo intelectual ', _antecedentesIntelectualController, readOnly: !_modoEdicion),
+          _buildCampoConTitulo(
+              'Desarrollo intelectual ', _antecedentesIntelectualController,
+              readOnly: !_modoEdicion),
           const SizedBox(height: 10.0),
-          _buildCampoConTitulo('Desarrollo socio-afectivo', _antecedentesSocioAfectivoController, readOnly: !_modoEdicion),
+          _buildCampoConTitulo(
+              'Desarrollo socio-afectivo', _antecedentesSocioAfectivoController,
+              readOnly: !_modoEdicion),
           const SizedBox(height: 16.0),
-
           _buildSeccionTitulo('ANTECEDENTES Y ESTRUCTURA FAMILIAR'),
           const Divider(),
-          _buildCampoConScroll('Descripción de los antecedentes', _estructuraFamiliarController, readOnly: !_modoEdicion),
+          _buildCampoConScroll(
+              'Descripción de los antecedentes', _estructuraFamiliarController,
+              readOnly: !_modoEdicion),
           const SizedBox(height: 16.0),
-
           _buildSeccionTitulo('PRUEBAS APLICADAS'),
           const Divider(),
-          _buildCampoConScroll('Descripción de las pruebas', _pruebasController, readOnly: !_modoEdicion),
+          _buildCampoConScroll('Descripción de las pruebas', _pruebasController,
+              readOnly: !_modoEdicion),
           const SizedBox(height: 16.0),
-
           _buildSeccionTitulo('IMPRESIÓN DIAGNÓSTICA'),
           const Divider(),
-          _buildCampoConScroll('Impresión diagnóstica', _impresionDiagnosticaController, readOnly: !_modoEdicion),
+          _buildCampoConScroll(
+              'Impresión diagnóstica', _impresionDiagnosticaController,
+              readOnly: !_modoEdicion),
           const SizedBox(height: 16.0),
-
           _buildSeccionTitulo('ÁREAS DE INTERVENCIÓN'),
           const Divider(),
-          _buildCampoConScroll('Descripción de las áreas', _areasIntervencionController, readOnly: !_modoEdicion),
+          _buildCampoConScroll(
+              'Descripción de las áreas', _areasIntervencionController,
+              readOnly: !_modoEdicion),
           const SizedBox(height: 16.0),
         ],
       ),

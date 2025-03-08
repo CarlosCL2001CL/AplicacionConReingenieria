@@ -15,23 +15,30 @@ class _HistoriaAdultState extends State<HistoriaAdult> {
   int _age = 0;
 
   final TextEditingController _nombreController = TextEditingController();
+  final TextEditingController _cedulaController = TextEditingController();
   final TextEditingController _cursoController = TextEditingController();
-  final TextEditingController _institucionController = TextEditingController();  
+  final TextEditingController _institucionController = TextEditingController();
   final TextEditingController _direccionController = TextEditingController();
   final TextEditingController _telefonoController = TextEditingController();
   final TextEditingController _remisionController = TextEditingController();
   final TextEditingController _coberturaController = TextEditingController();
-  final TextEditingController _observacionesController = TextEditingController();
+  final TextEditingController _observacionesController =
+      TextEditingController();
   final TextEditingController _responsableController = TextEditingController();
-  final TextEditingController _motivoConsultaController = TextEditingController();
-  final TextEditingController _desencadenantesController = TextEditingController();
-  final TextEditingController _antecedentesGController = TextEditingController();
- 
+  final TextEditingController _motivoConsultaController =
+      TextEditingController();
+  final TextEditingController _desencadenantesController =
+      TextEditingController();
+  final TextEditingController _antecedentesGController =
+      TextEditingController();
 
-  final TextEditingController _estructuraFamiliarController = TextEditingController();
+  final TextEditingController _estructuraFamiliarController =
+      TextEditingController();
   final TextEditingController _pruebasController = TextEditingController();
-  final TextEditingController _impresionDiagnosticaController = TextEditingController();
-  final TextEditingController _areasIntervencionController = TextEditingController();
+  final TextEditingController _impresionDiagnosticaController =
+      TextEditingController();
+  final TextEditingController _areasIntervencionController =
+      TextEditingController();
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -74,9 +81,10 @@ class _HistoriaAdultState extends State<HistoriaAdult> {
 
   Future<void> _submitForm() async {
     // Verificación de que todos los campos estén llenos
-    if (_nombreController.text.isEmpty ||
+    if (_cedulaController.text.isEmpty ||
+        _nombreController.text.isEmpty ||
         _cursoController.text.isEmpty ||
-        _institucionController.text.isEmpty ||       
+        _institucionController.text.isEmpty ||
         _direccionController.text.isEmpty ||
         _telefonoController.text.isEmpty ||
         _remisionController.text.isEmpty ||
@@ -84,8 +92,8 @@ class _HistoriaAdultState extends State<HistoriaAdult> {
         _observacionesController.text.isEmpty ||
         _responsableController.text.isEmpty ||
         _motivoConsultaController.text.isEmpty ||
-        _desencadenantesController.text.isEmpty || 
-        _antecedentesGController.text.isEmpty ||       
+        _desencadenantesController.text.isEmpty ||
+        _antecedentesGController.text.isEmpty ||
         _estructuraFamiliarController.text.isEmpty ||
         _pruebasController.text.isEmpty ||
         _impresionDiagnosticaController.text.isEmpty ||
@@ -94,7 +102,8 @@ class _HistoriaAdultState extends State<HistoriaAdult> {
         _evaluationDate == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Verifique que todos los campos estén llenos antes de enviar el formulario'),
+          content: Text(
+              'Verifique que todos los campos estén llenos antes de enviar el formulario'),
         ),
       );
       return;
@@ -113,10 +122,11 @@ class _HistoriaAdultState extends State<HistoriaAdult> {
     try {
       await FirebaseFirestore.instance.collection('HistoriaAdult').add({
         'nombres': _nombreController.text,
+        'cedula': _cedulaController.text,
         'fechaNacimiento': _selectedDate!.toIso8601String(),
         'edad': _age,
         'curso': _cursoController.text,
-        'institucion': _institucionController.text,       
+        'institucion': _institucionController.text,
         'direccion': _direccionController.text,
         'telefono': _telefonoController.text,
         'remision': _remisionController.text,
@@ -125,8 +135,8 @@ class _HistoriaAdultState extends State<HistoriaAdult> {
         'observaciones': _observacionesController.text,
         'responsable': _responsableController.text,
         'motivoConsulta': _motivoConsultaController.text,
-        'desencadenantes': _desencadenantesController.text, 
-        'antecedenteG': _antecedentesGController.text,       
+        'desencadenantes': _desencadenantesController.text,
+        'antecedenteG': _antecedentesGController.text,
         'estructuraFamiliar': _estructuraFamiliarController.text,
         'pruebas': _pruebasController.text,
         'impresionDiagnostica': _impresionDiagnosticaController.text,
@@ -140,8 +150,9 @@ class _HistoriaAdultState extends State<HistoriaAdult> {
 
       // Limpiar el formulario y resetear los campos
       _nombreController.clear();
+      _cedulaController.clear();
       _cursoController.clear();
-      _institucionController.clear();      
+      _institucionController.clear();
       _direccionController.clear();
       _telefonoController.clear();
       _remisionController.clear();
@@ -149,8 +160,8 @@ class _HistoriaAdultState extends State<HistoriaAdult> {
       _observacionesController.clear();
       _responsableController.clear();
       _motivoConsultaController.clear();
-      _desencadenantesController.clear();   
-      _antecedentesGController.clear();   
+      _desencadenantesController.clear();
+      _antecedentesGController.clear();
       _estructuraFamiliarController.clear();
       _pruebasController.clear();
       _impresionDiagnosticaController.clear();
@@ -170,9 +181,7 @@ class _HistoriaAdultState extends State<HistoriaAdult> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(        
-        
-      ),
+      appBar: AppBar(),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -193,14 +202,14 @@ class _HistoriaAdultState extends State<HistoriaAdult> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: const [
                       Text(
-                        'FUNDACIÓN DE NIÑOS ESPECIALES',
+                        '            FUNDACIÓN',
                         style: TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                       Text(
-                        '“SAN MIGUEL” FUNESAMI',
+                        '"UNA MIRADA FELIZ"',
                         style: TextStyle(
                           fontSize: 19,
                           fontWeight: FontWeight.bold,
@@ -219,7 +228,7 @@ class _HistoriaAdultState extends State<HistoriaAdult> {
                         ),
                       ),
                       Align(
-                        alignment: Alignment.center, 
+                        alignment: Alignment.center,
                         child: Text(
                           'HISTORIA CLINICA DE ADULTOS',
                           style: TextStyle(
@@ -234,11 +243,7 @@ class _HistoriaAdultState extends State<HistoriaAdult> {
                 ],
               ),
             ),
-            
 
-
-
-            
             const SizedBox(height: 20),
             // Sección 1: Datos Personales
             const Text(
@@ -253,7 +258,15 @@ class _HistoriaAdultState extends State<HistoriaAdult> {
                 border: OutlineInputBorder(),
               ),
             ),
-            
+            const SizedBox(height: 10),
+            TextFormField(
+              controller: _cedulaController,
+              decoration: const InputDecoration(
+                labelText: 'CEDULA',
+                border: OutlineInputBorder(),
+              ),
+            ),
+
             const SizedBox(height: 10),
             // Fecha de nacimiento y cálculo automático de la edad
             Row(
@@ -308,7 +321,7 @@ class _HistoriaAdultState extends State<HistoriaAdult> {
                 border: OutlineInputBorder(),
               ),
             ),
-            const SizedBox(height: 10),            
+            const SizedBox(height: 10),
             // Dirección
             TextFormField(
               controller: _direccionController,
@@ -425,7 +438,7 @@ class _HistoriaAdultState extends State<HistoriaAdult> {
                 labelText: 'Describa los antecedentes',
                 border: OutlineInputBorder(),
               ),
-            ),              
+            ),
             const SizedBox(height: 20),
 
             // Sección 5: Antecedentes y estrructura Familiares
