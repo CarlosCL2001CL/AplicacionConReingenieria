@@ -1,0 +1,2 @@
+F:/DOCUEMNTOS/OCTAVO NIVEL/CONSTRUCCION Y EVOLUCION SW/UNIDAD 3/PRYFINAL/AppLimpia2.0 - APP completa 100%/admin_application_1/android/app/.cxx/RelWithDebInfo/2v5p142d/armeabi-v7a/CMakeFiles/edit_cache.dir
+F:/DOCUEMNTOS/OCTAVO NIVEL/CONSTRUCCION Y EVOLUCION SW/UNIDAD 3/PRYFINAL/AppLimpia2.0 - APP completa 100%/admin_application_1/android/app/.cxx/RelWithDebInfo/2v5p142d/armeabi-v7a/CMakeFiles/rebuild_cache.dir

@@ -1,7 +1,7 @@
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/View/login_page.dart';
+import 'package:flutter_application_1/LoginPage.dart';
 import 'package:flutter_application_1/firebase_options.dart';
 
 Future<void> main() async {
@@ -20,7 +20,8 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primaryColor: Color.fromARGB(214, 232, 56, 56),
       ),
-      home: LoginPage(), // Cambiar a LoginPage      
+      home: LoginPage(), // Cambiar a LoginPage
+      
     );
   }
 }
